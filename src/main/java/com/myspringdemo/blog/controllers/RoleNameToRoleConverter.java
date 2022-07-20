@@ -38,8 +38,8 @@ public class RoleNameToRoleConverter implements Converter<Integer, Role>
 
     @Override
     public Role convert(Integer source) {
-        
-        return rolesMap.get(source);
+          return rolesRepository.findById(source).orElse(null);
+      //  return rolesMap.get(source);
         
     }
 }

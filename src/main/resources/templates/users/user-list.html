@@ -19,13 +19,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
 
 <div class="container mt-5">
-    <h1>Site Blog</h1>
+    <h1>USERS LIST</h1>
     <h3 th:text="${username}"/>
     <div th:each="el : ${users}" class="alert alert-info mt-2">
         <h3 th:text="${el.username}"/>
 
 
-        <a th:href="'/users/' + ${el.username}" class="btn btn-warning">View more</a>
+        <a th:href="'/users/' + ${el.username} +'/edit'" class="btn btn-warning">View more</a>
         <form th:action="'/users/' + ${el.username} + '/deleteuser'" method="post">
             <button class="btn btn-warning" type="submit">Delete</button>
         </form>

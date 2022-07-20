@@ -21,8 +21,8 @@ dependencies {
         annotationProcessor 'org.projectlombok:lombok'
         implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     // https://mvnrepository.com/artifact/org.hibernate/hibernate-validator
-        implementation group: 'org.hibernate', name: 'hibernate-validator', version: '7.0.4.Final'
-
+       // implementation group: 'org.hibernate', name: 'hibernate-validator', version: '7.0.4.Final'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
         developmentOnly 'org.springframework.boot:spring-boot-devtools'
         runtimeOnly 'mysql:mysql-connector-java'

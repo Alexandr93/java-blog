@@ -6,20 +6,13 @@ import com.myspringdemo.blog.repo.RolesRepository;
 import com.myspringdemo.blog.repo.UserRepository;
 import com.myspringdemo.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.security.Principal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+
 
 @Controller
 public class UserController {
@@ -34,6 +27,13 @@ public class UserController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    //добавляем в модель все роли с глобальной видимостью
+    @ModelAttribute
+    public void getAllRoles(Model model){
+        Iterable<Role> roles = rolesRepository.findAll();
+        model.addAttribute("allRoles", roles);
+    }
+
     @GetMapping("/users")
     public String usersListShow(Model model){
 
@@ -43,77 +43,51 @@ public class UserController {
         return "users/user-list";
     }
 
-    @GetMapping("/users/{username}")
-    public String userDetails(@PathVariable String username,  Model model, Principal principal){
+    @GetMapping("/users/{username}/edit")
+    public String userDetails(@PathVariable String username,  Model model){
         UserEntity user = userRepository.findByUsername(username);
-        Iterable<Role> roles = rolesRepository.findAll();
+
 
         model.addAttribute("user", user);
-        model.addAttribute("roles", roles);
-
-
-
         return "users/user-details";
     }
 
 
-    @PostMapping("/users/{username}")
-    public String userRoleAdd(@RequestParam List<Integer> roles, @PathVariable String username, Model model){
+    @PostMapping("/users/{username}/edit")
+    public String userRoleAdd(@ModelAttribute UserEntity user, @PathVariable String username){
 
-
-        UserEntity userUpdate = userRepository.findByUsername(username);
-
-        /*Set<Role> roles= roleee.stream()
-                .map(r->rolesRepository.findByName(r))
-                .collect(Collectors.toSet());*///находим роли которая передается с віпадающего списка в базе
-        //userUpdate.setRoles(new HashSet<>(roleee));
-        if(!roles.isEmpty()) {
-
-            userUpdate.setRoles(userService.getUserRolesbyId(roles));
-            //userUpdate.setRoles(userService.getUserRoles(roleee));//добавляем в список
-            userRepository.save(userUpdate);
-        }
-        else{
-            userUpdate.setRoles(null);
-        }
-
-        userRepository.save(userUpdate);
-        return "redirect:/users/"+username;
+        //костыль чтобы пароль менялся на старый
+        user.setPassword(userRepository.findByUsername(user.getUsername()).getPassword());
+        userRepository.save(user);
+        return "redirect:/users/"+user.getUsername()+"/edit";
     }
 
 
 
     @GetMapping("/users/add")
-    public String addUser(Model model){
-        Iterable<Role> allRoles = rolesRepository.findAll();
+    public String addUser(UserEntity user, Model model){
 
-        UserEntity user = new UserEntity();
+
         model.addAttribute("user", user);
-        model.addAttribute("allRoles", allRoles);
+
 
         return "users/user-add";
     }
 
 
     @PostMapping("/users/add")
-    public String userSave(@ModelAttribute UserEntity user
-                         ){
-                           // @ModelAttribute UserEntity user){
+    public String userSave(@ModelAttribute("user")@Valid UserEntity user, BindingResult bindingResult){
+                           //получаем юзера с формы, за счет конвертера получаем сразу роли, а не айдишники ролей
+        if (bindingResult.hasErrors()){
+
+            return "users/user-add";
+        }
 
 
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-
-
-      /*  UserEntity user = new UserEntity();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));*/
-        user.setEnabled(true);
-       // user.setRoles(userService.getUserRoles(roles));
 
         userRepository.save(user);
-
-
-
         return "redirect:/users";
     }
     @PostMapping("/users/{username}/deleteuser")
@@ -122,4 +96,5 @@ public class UserController {
         userRepository.delete(user);
         return "redirect:/users";
     }
+
 }

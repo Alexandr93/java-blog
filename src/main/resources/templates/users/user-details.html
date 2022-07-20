@@ -33,20 +33,21 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
     <div class="container mt-5">
 
     <form  method="post"   th:object="${user}">
-
+        <input type="hidden" th:field="*{id}" th:value="${user.getId()}">
        <!--<select class="form-control"  th:id="dropDownList" th:name="roleee" multiple="multiple">
             <option th:each="option : ${roles}" th:value="${option.getName()}" th:text="${option.getName()}"  ></option>
         </select>-->
 
         <ul>
-            <li class="form-control" th:each="option : ${roles}"  th:id="dropDownList" th:name="roleee">
+            <li class="form-control" th:each="option : ${allRoles}"  th:id="dropDownList" th:name="roleee">
 
-                <input name="roleee" type="checkbox" th:field="*{roles}" th:value="${option.getId()}" th:text="${option.getName()}" >
+                <input  type="checkbox" th:field="*{roles}" th:value="${option.getId()}" th:text="${option.getName()}" >
 
             </li>
         </ul>
-
-
+        <label><input type="checkbox" th:field="*{enabled}"
+                      th:value="${user.isEnabled()}" th:text="Enable"  /></label>
+<br>
         <input
 
                 type="hidden"

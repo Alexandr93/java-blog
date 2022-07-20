@@ -24,11 +24,7 @@ public class RolesController {
     @Autowired
     RolesRepository rolesRepository;
 
-    @Autowired
-    UserService userService;
 
-   /* @Autowired
-    RoleNameToRoleConverter roleNameToRoleConverter;*/
 
     @PostMapping("/users/{username}/deleterole")
     public String userRoleDelete(@RequestParam String roleee, @PathVariable String username, @ModelAttribute("user") UserEntity user){
@@ -38,6 +34,6 @@ public class RolesController {
         userUpdate.deleteRole(role);//добавляем в список
         userRepository.save(userUpdate);
 
-        return "redirect:/users/"+username;
+        return "redirect:/users/"+username+"/edit";
     }
 }
