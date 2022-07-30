@@ -3,15 +3,14 @@ package com.myspringdemo.blog.controllers;
 import com.myspringdemo.blog.models.Role;
 
 import com.myspringdemo.blog.repo.RolesRepository;
-import com.myspringdemo.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+@Service
 public class RoleNameToRoleConverter implements Converter<Integer, Role>
 {
 

@@ -8,5 +8,5 @@ import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends CrudRepository<UserEntity, String> {
     UserEntity findByUsername(String username);
-
+  //  Long deleteByUsername(String username);
 }

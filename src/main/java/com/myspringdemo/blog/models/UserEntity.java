@@ -1,12 +1,13 @@
 package com.myspringdemo.blog.models;
 
 import lombok.*;
-import org.hibernate.Hibernate;
+
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+
 import javax.validation.constraints.Size;
-import java.util.Objects;
+import java.util.HashSet;
+
 import java.util.Set;
 
 @Data
@@ -22,7 +23,10 @@ public class UserEntity {
     @Size(min = 3, message = "Password is too short")
     private String password;
 
-    private boolean enabled;
+
+
+
+    private boolean enabled =true;
     @ManyToMany//(fetch = FetchType.EAGER)
     @JoinTable(name = "users_has_roles",
             joinColumns = @JoinColumn(name = "users_id"),
@@ -31,6 +35,9 @@ public class UserEntity {
     @ToString.Exclude
     private Set<Role> roles;
 
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Post> posts = new HashSet<>();
 
 
 
@@ -44,8 +51,5 @@ public class UserEntity {
 
 
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+
 }

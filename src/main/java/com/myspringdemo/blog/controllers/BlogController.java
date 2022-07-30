@@ -6,22 +6,22 @@ package com.myspringdemo.blog.controllers;
 
 
 import com.myspringdemo.blog.models.Post;
+import com.myspringdemo.blog.models.UserEntity;
 import com.myspringdemo.blog.repo.PostRepository;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import com.myspringdemo.blog.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -31,13 +31,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class BlogController {
-    @Autowired
+
     private PostRepository postRepository;
-    
+
+    private UserRepository userRepository;
+    @Autowired
+    public BlogController(PostRepository postRepository, UserRepository userRepository) {
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
+    }
+
     @GetMapping("/blog")
     public String blogMain(Model model){
             Iterable<Post> posts = postRepository.findAll();
-        model.addAttribute("posts", posts);
+            model.addAttribute("posts", posts);
         
             return "blog-main";
     }
@@ -50,9 +57,17 @@ public class BlogController {
     }
 
     @PostMapping("/blog/add")
-    public String blogPostAdd(@RequestParam String title,
+    /*public String blogPostAdd(@RequestParam String title,
             @RequestParam String anons, @RequestParam String full_text, Model model){
-        Post post = new Post(title, anons, full_text);
+            Post post = new Post(title, anons, full_text);
+            */
+     public String blogPostAdd(@ModelAttribute Post post, Principal principal){
+        UserEntity user = userRepository.findByUsername(principal.getName());
+
+        post.setAuthor(user);
+      //  user.getPosts().add(post);
+       //    userRepository.save(user);
+            //post.setAuthor());
         postRepository.save(post);
         return "redirect:/blog";
     }
@@ -63,7 +78,11 @@ public class BlogController {
             return "redirect:/blog";
         Optional<Post> post = postRepository.findById(id);
         ArrayList<Post> res = new ArrayList<>();
-        post.ifPresent(res::add);
+        post.ifPresent(post1 -> {
+            post1.setViews(post1.getViews()+1);
+            res.add(post1);
+            postRepository.save(post1);//сделать позже обновление только просмотров
+        });
         model.addAttribute("post", res);
         return "blog-details";
     }

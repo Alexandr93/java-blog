@@ -22,17 +22,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
     <h1>User Edit</h1>
     <h3 th:text="${username}"/>
 
-    <div th:each="el : ${user.getRoles()}" class="alert alert-info mt-2">
+  <!--  <div th:each="el : ${user.getRoles()}" class="alert alert-info mt-2">
         <h3 th:text="${el.getName()}"/>
 
 
 
-        <!--<a th:href="'/users/' + ${el.username}" class="btn btn-warning">View more</a>-->
-    </div>
+
+    </div>-->
 
     <div class="container mt-5">
 
-    <form  method="post"   th:object="${user}">
+    <form  th:method="post"   th:object="${user}">
         <input type="hidden" th:field="*{id}" th:value="${user.getId()}">
        <!--<select class="form-control"  th:id="dropDownList" th:name="roleee" multiple="multiple">
             <option th:each="option : ${roles}" th:value="${option.getName()}" th:text="${option.getName()}"  ></option>
@@ -54,13 +54,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 th:name="${_csrf.parameterName}"
                 th:value="${_csrf.token}" />
         <br>
-        <button type="submit" class="btn btn-success">Add role</button>
+        <button type="submit" class="btn btn-success">Edit roles</button>
     </form>
     </div>
 
     <div class="container mt-5">
 
-        <form  method="post"  th:action="@{/users/{username}/deleterole(username=${username})}" th:object="${user}">
+        <!--<form  method="post"  th:action="@{/users/{username}/deleterole(username=${username})}" th:object="${user}">
             <select class="form-control" th:id="dropDownList" th:name="roleee">
                 <option value="0">select role</option>
                 <option th:each="option : ${user.getRoles()}" th:value="${option.getName()}" th:text="${option.getName()}"  ></option>
@@ -74,7 +74,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     th:name="${_csrf.parameterName}"
                     th:value="${_csrf.token}" />
             <br>
-            <button type="submit" class="btn btn-success">Delete role</button>
+            <button type="submit" class="btn btn-success">Delete role</button>-->
         </form>
     </div>
 

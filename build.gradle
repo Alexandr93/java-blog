@@ -20,6 +20,17 @@ dependencies {
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
         implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-rest
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest', version: '2.7.0'
+// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+   // implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+
     // https://mvnrepository.com/artifact/org.hibernate/hibernate-validator
        // implementation group: 'org.hibernate', name: 'hibernate-validator', version: '7.0.4.Final'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -27,6 +38,7 @@ dependencies {
         developmentOnly 'org.springframework.boot:spring-boot-devtools'
         runtimeOnly 'mysql:mysql-connector-java'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
 
 tasks.named('test') {

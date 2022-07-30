@@ -5,12 +5,10 @@
 package com.myspringdemo.blog.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  *
@@ -26,13 +24,23 @@ public class Post {
     private String title, anons, full_text;
     private int views;
 
+
+    //разобраться как работает jsonignore
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    //@JoinColumn(name = "user_id")
+    private UserEntity author;
     public Post() {
+       author = new UserEntity();
+       author.setId(2);//заглушка чтобы посты с рест приходили с автором api
     }
 
     public Post(String title, String anons, String full_text) {
+
         this.title = title;
         this.anons = anons;
         this.full_text = full_text;
+
     }
     
 

@@ -1,49 +1,34 @@
 package com.myspringdemo.blog.services;
 
+import com.myspringdemo.blog.models.ERole;
 import com.myspringdemo.blog.models.Role;
 import com.myspringdemo.blog.models.UserEntity;
 import com.myspringdemo.blog.repo.RolesRepository;
 import com.myspringdemo.blog.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
-
+public class UserService {
+    RolesRepository rolesRepository;
+    PasswordEncoder passwordEncoder;
     UserRepository userRepository;
 
-
-    RolesRepository rolesRepository;
     @Autowired
-    public UserService(UserRepository userRepository, RolesRepository rolesRepository) {
-        this.userRepository = userRepository;
+    public UserService(RolesRepository rolesRepository, PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.rolesRepository = rolesRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
     }
 
-    @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByUsername(username);
-        if(user==null){
-            throw new UsernameNotFoundException(String.format("User '%s' not found"));
-        }
-        return new User(user.getUsername(), user.getPassword(),
-                mapRolesToAuthorities(user.getRoles()));
-    }
-    @Transactional
-    public Set<Role> getUserRoles(List<String> username){
+    public Set<Role> getUserRoles(List<ERole> username){
         return username.stream()
                 .map(r->rolesRepository.findByName(r))
                 .collect(Collectors.toSet());
@@ -55,10 +40,20 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toSet());
 
     }
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
 
-        return roles.stream().map(r-> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
+
+    public UserEntity createUser(UserEntity user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return user;
     }
+    //обновляем только поля которіе меняются в модели
+    //возможно нужно сделать проверку по каждому полю чтобы было более универсально
+    public void updateUser(UserEntity user){
+        UserEntity userUpdate = userRepository.findByUsername(user.getUsername());
+        userUpdate.setEnabled(user.isEnabled());
+        userUpdate.setRoles(user.getRoles());
 
-
+        userRepository.save(userUpdate);
+    }
 }

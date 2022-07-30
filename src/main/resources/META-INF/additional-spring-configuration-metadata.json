@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "author.orders.pageSize",
+  "type": "java.lang.Integer",
+  "description": "Numbers of post on page"
+}]}
