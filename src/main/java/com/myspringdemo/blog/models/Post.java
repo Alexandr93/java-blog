@@ -32,7 +32,7 @@ public class Post {
     private UserEntity author;
     public Post() {
        author = new UserEntity();
-       author.setId(2);//заглушка чтобы посты с рест приходили с автором api
+       author.setId(2L);//заглушка чтобы посты с рест приходили с автором api
     }
 
     public Post(String title, String anons, String full_text) {

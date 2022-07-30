@@ -2,7 +2,6 @@ package com.myspringdemo.blog.services;
 
 import com.myspringdemo.blog.models.Role;
 import com.myspringdemo.blog.models.UserEntity;
-import com.myspringdemo.blog.repo.RolesRepository;
 import com.myspringdemo.blog.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,13 +17,13 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     UserRepository userRepository;
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
 
 

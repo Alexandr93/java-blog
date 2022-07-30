@@ -17,7 +17,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String username;
     //@NotNull
     @Size(min = 3, message = "Password is too short")

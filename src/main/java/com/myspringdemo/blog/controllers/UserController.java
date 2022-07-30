@@ -1,7 +1,9 @@
 package com.myspringdemo.blog.controllers;
 
+import com.myspringdemo.blog.models.ERole;
 import com.myspringdemo.blog.models.Role;
 import com.myspringdemo.blog.models.UserEntity;
+import com.myspringdemo.blog.pojo.UserModel;
 import com.myspringdemo.blog.repo.RolesRepository;
 import com.myspringdemo.blog.repo.UserRepository;
 import com.myspringdemo.blog.services.UserService;
@@ -13,36 +15,34 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
 public class UserController {
 
-    UserRepository userRepository;
-
-
     UserService userService;
 
 
-    RolesRepository rolesRepository;
-    @Autowired
-    public UserController(UserRepository userRepository, UserService userService, RolesRepository rolesRepository) {
-        this.userRepository = userRepository;
+    public UserController( UserService userService) {
+
         this.userService = userService;
-        this.rolesRepository = rolesRepository;
+
     }
 
     //добавляем в модель все роли с глобальной видимостью
     @ModelAttribute
     public void getAllRoles(Model model){
-        Iterable<Role> roles = rolesRepository.findAll();
+
+        Iterable<Role> roles =  userService.getRolesList();
         model.addAttribute("allRoles", roles);
     }
 
     @GetMapping("/users")
     public String usersListShow(Model model){
-
-        Iterable<UserEntity> users = userRepository.findAll();
+        List<UserModel> users = userService.usersList();
         model.addAttribute("users", users);
 
         return "users/user-list";
@@ -50,8 +50,7 @@ public class UserController {
 
     @GetMapping("/users/{username}/edit")
     public String userDetails(@PathVariable String username,  Model model){
-        UserEntity user = userRepository.findByUsername(username);
-
+        UserModel user = userService.findByUsername(username);
         model.addAttribute("user", user);
         return "users/user-details";
     }
@@ -59,10 +58,8 @@ public class UserController {
 
     @PostMapping("/users/{username}/edit")
     public String userEdit(@ModelAttribute UserEntity user, @PathVariable String username){
-
        userService.updateUser(user);
-
-        return "redirect:/users/"+user.getUsername()+"/edit";
+       return "redirect:/users/"+user.getUsername()+"/edit";
     }
 
 
@@ -88,9 +85,7 @@ public class UserController {
     }
     @PostMapping("/users/{username}/deleteuser")
     public String userDelete(@PathVariable String username){
-        UserEntity user = userRepository.findByUsername(username);
-
-        userRepository.delete(user);
+        userService.deleteUser(username);
         return "redirect:/users";
     }
 

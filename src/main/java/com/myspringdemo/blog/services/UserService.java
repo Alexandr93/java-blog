@@ -3,6 +3,7 @@ package com.myspringdemo.blog.services;
 import com.myspringdemo.blog.models.ERole;
 import com.myspringdemo.blog.models.Role;
 import com.myspringdemo.blog.models.UserEntity;
+import com.myspringdemo.blog.pojo.UserModel;
 import com.myspringdemo.blog.repo.RolesRepository;
 import com.myspringdemo.blog.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -56,4 +58,28 @@ public class UserService {
 
         userRepository.save(userUpdate);
     }
+
+    public void deleteUser(String username) {
+        UserEntity user = userRepository.findByUsername(username);
+
+        userRepository.delete(user);
+    }
+
+    public Iterable<Role> getRolesList() {
+        return rolesRepository.findAll();
+    }
+
+    public List<UserModel> usersList() {
+        Iterable<UserEntity> users = userRepository.findAll();
+        List<UserModel> usersList = new ArrayList<>();
+        users.forEach(user -> usersList.add(UserModel.userEntityToUserModel(user)));
+        return usersList;
+    }
+
+    public UserModel findByUsername(String username) {
+
+
+        return UserModel.userEntityToUserModel(userRepository.findByUsername(username));
+    }
+
 }
