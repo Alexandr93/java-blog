@@ -1,12 +1,8 @@
 package com.myspringdemo.blog.controllers;
 
-import com.myspringdemo.blog.configs.PageSizeProp;
-import com.myspringdemo.blog.models.UserEntity;
-import com.myspringdemo.blog.repo.PostRepository;
-import com.myspringdemo.blog.repo.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import com.myspringdemo.blog.pojo.Author;
+import com.myspringdemo.blog.pojo.PostModel;
+import com.myspringdemo.blog.services.AuthorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,36 +10,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/authors")
 public class AuthorController {
 
+    private final AuthorService authorService;
 
-    UserRepository userRepository;
-
-    PostRepository postRepository;
-    PageSizeProp pageSizeProp;
-
-    @Autowired
-    public AuthorController(UserRepository userRepository, PostRepository postRepository, PageSizeProp pageSizeProp) {
-        this.userRepository = userRepository;
-        this.postRepository = postRepository;
-        this.pageSizeProp = pageSizeProp;
+    public AuthorController(AuthorService authorService) {
+        this.authorService = authorService;
     }
 
-    public AuthorController() {
-    }
 
     @ModelAttribute
     public void getAllUsersList(Model model) {
-        Iterable<UserEntity> authorsList = userRepository.findAll();
+        List<Author> authorsList = authorService.getAllAuthors();
         model.addAttribute("authorsList", authorsList);
-    }
 
-
-    public AuthorController(UserRepository userRepository, PostRepository postRepository) {
-        this.userRepository = userRepository;
-        this.postRepository = postRepository;
     }
 
     @GetMapping
@@ -55,16 +39,8 @@ public class AuthorController {
 
     @GetMapping("/{username}")
     public String postsByAuthor(@PathVariable String username, Model model) {
-        // Iterable<Post> postsByAuthor = postRepository.findPostByAuthor(author.get);
-        // author.getPosts().forEach(post -> System.out.println(post.getTitle()));
-
-        Pageable pageable = PageRequest.of(0, pageSizeProp.getPageSize());
-        UserEntity author = userRepository.findByUsername(username);
-
-        model.addAttribute("author", author);
-
-        model.addAttribute("postsByAuthor", postRepository.findPostByAuthor(author, pageable));
-        // return "redirect:/blog";
+        List<PostModel> postModelList = authorService.postByAuthor(username);
+        model.addAttribute("postsByAuthor", postModelList);
         return "authors/post-by-author";
     }
 

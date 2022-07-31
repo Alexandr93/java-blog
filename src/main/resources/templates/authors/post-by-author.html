@@ -16,8 +16,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
 <header th:insert="blocks/header :: header"></header>
 
-<div class="container mt-5" th:object="${author}">
-    <h1>Posts by Author</h1>
+<div class="container mt-5" >
+    <h1 th:text="'Posts by ' + ${username}">Posts by Author</h1>
     <div th:each="el : ${postsByAuthor}" class="alert alert-info mt-2">
         <h3 th:text="${el.title}"/>
         <p th:text="${el.anons}"/>

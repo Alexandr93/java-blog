@@ -25,9 +25,9 @@ public class Post {
     private int views;
 
 
-    //разобраться как работает jsonignore
+
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     //@JoinColumn(name = "user_id")
     private UserEntity author;
     public Post() {

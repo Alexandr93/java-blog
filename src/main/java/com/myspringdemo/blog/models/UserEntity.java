@@ -1,16 +1,18 @@
 package com.myspringdemo.blog.models;
 
 import lombok.*;
-
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-
 import javax.validation.constraints.Size;
 import java.util.HashSet;
-
+import java.util.Objects;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
 @Table(name = "users")
 public class UserEntity {
@@ -37,6 +39,7 @@ public class UserEntity {
 
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private Set<Post> posts = new HashSet<>();
 
 
@@ -50,6 +53,16 @@ public class UserEntity {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        UserEntity that = (UserEntity) o;
+        return id != null && Objects.equals(id, that.id);
+    }
 
-
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

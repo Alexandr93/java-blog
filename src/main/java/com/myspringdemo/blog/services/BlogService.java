@@ -5,6 +5,7 @@ import com.myspringdemo.blog.models.UserEntity;
 import com.myspringdemo.blog.pojo.PostModel;
 import com.myspringdemo.blog.repo.PostRepository;
 import com.myspringdemo.blog.repo.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,17 +14,11 @@ import java.util.Optional;
 
 
 @Service
+@AllArgsConstructor
 public class BlogService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
-
-
-
-    public BlogService(UserRepository userRepository, PostRepository postRepository) {
-        this.userRepository = userRepository;
-        this.postRepository = postRepository;
-    }
 
 
     public void addPost(PostModel postModel, String author) {
