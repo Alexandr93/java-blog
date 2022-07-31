@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/authors")
@@ -25,7 +26,7 @@ public class AuthorController {
 
     @ModelAttribute
     public void getAllUsersList(Model model) {
-        List<Author> authorsList = authorService.getAllAuthors();
+        Set<Author> authorsList = authorService.getAllAuthors();
         model.addAttribute("authorsList", authorsList);
 
     }

@@ -27,15 +27,11 @@ public class AuthorService {
     private final PageSizeProp pageSizeProp;
     private final PostRepository postRepository;
 
-    public List<Author> getAllAuthors(){
-        Iterable<UserEntity> authorUser = userRepository.findUserEntityByPostsIsNotNull();
-        List<Author> authors = new ArrayList<>();
+    public Set<Author> getAllAuthors(){
+        Set<UserEntity> authorUser = userRepository.findUserEntityByPostsIsNotNull();
 
-        authorUser.forEach(user ->
-                        authors.add(Author.UserEntitiesToAuthor(user))
-         );
+        return authorUser.stream().map(Author::UserEntitiesToAuthor).collect(Collectors.toSet());
 
-        return authors.stream().distinct().collect(Collectors.toList());
     }
 
 
