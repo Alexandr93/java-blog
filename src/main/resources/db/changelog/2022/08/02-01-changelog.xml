@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.14.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+
+    <changeSet id="test_content_add_usersandroles" author="alex">
+        <insert tableName="users">
+            <column name="username" value="admin"/>
+            <column name="password" value="$2a$12$7V76izb/ZqVvFwjUAp3TtOoczzQ9ANHa0UZq0WP3UKtfyjEGsxlFu"/>
+            <column name="enabled" valueBoolean="true"/>
+        </insert>
+        <insert tableName="users">
+            <column name="username" value="user"/>
+            <column name="password" value="$2a$12$7V76izb/ZqVvFwjUAp3TtOoczzQ9ANHa0UZq0WP3UKtfyjEGsxlFu"/>
+            <column name="enabled" valueBoolean="true"/>
+        </insert>
+
+
+        <insert tableName="roles">
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="READ_NEWS"/>
+        </insert>
+
+
+    </changeSet>
+    <changeSet id="test_addautorities" author="alex">
+        <insert tableName="users_has_roles">
+            <column name="roles_id" value="1"/>
+            <column name="users_id" value="1"/>
+        </insert>
+        <insert tableName="users_has_roles">
+            <column name="roles_id" value="2"/>
+            <column name="users_id" value="2"/>
+        </insert>
+
+        <insert tableName="post">
+            <column name="anons" value="First post anons"/>
+            <column name="title" value="First post title"/>
+            <column name="full_text" value="First post fulltext"/>
+            <column name="views" valueNumeric="0"/>
+            <column name="author_id" value="1"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

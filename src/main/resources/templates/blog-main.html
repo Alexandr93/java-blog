@@ -16,7 +16,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
     
     <header th:insert="blocks/header :: header"></header>
     
-    <div class="container mt-5">
+    <!--<div class="container mt-5">
         <h1>Site Blog</h1>
         <div th:each="el : ${posts}" class="alert alert-info mt-2">
             <h3 th:text="${el.title}"/>
@@ -24,8 +24,51 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             
             <a th:href="'/blog/' + ${el.id}" class="btn btn-warning">View more</a>
         </div>
+    </div>-->
+
+
+
+    <div class="album py-5 bg-light">
+
+        <div class="container">
+            <h1>Site Blog</h1>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div  th:each="el : ${posts}" class="col" >
+                    <div class="card shadow-sm">
+                        <svg  class="bd-placeholder-img card-img-top" width="100%" height="225"
+                              xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                              preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>  <a th:href="'/blog/' + ${el.id}" ><rect width="100%" height="100%" fill="#55595c"></rect> <text th:text="${el.title}" x="50%" y="50%" fill="#eceeef" dy=".3em">Test</text></a></svg>
+
+                        <div class="card-body" >
+
+                            <p th:text="${el.anons}" class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a th:href="'/blog/' + ${el.id}" class="btn btn-sm btn-outline-secondary">View</a>
+                                    <a th:href="'/blog/' + ${el.id} +'/edit'" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                </div>
+                                <small th:text="'Views '+${el.views}" class="text-muted">9 mins</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
     <div th:insert="blocks/footer :: footer"></div>
  
     

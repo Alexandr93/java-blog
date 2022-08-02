@@ -6,8 +6,8 @@ import com.myspringdemo.blog.pojo.PostModel;
 import com.myspringdemo.blog.repo.PostRepository;
 import com.myspringdemo.blog.repo.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +20,7 @@ public class BlogService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
-
+    @Transactional
     public void addPost(PostModel postModel, String author) {
 
         UserEntity user = userRepository.findByUsername(author);
@@ -39,17 +39,19 @@ public class BlogService {
 
 
     //добавить проверку и ексепшны
+    @Transactional
     public PostModel postDetails(long id) {
 
         Optional<Post> post = postRepository.findById(id);
         PostModel postModel;
-       // post.get().setViews(post.get().getViews() + 1);
+        // post.get().setViews(post.get().getViews() + 1);
         iterateViews(post);
         postModel = PostModel.PostToPostModel(postRepository.save(post.get()));
         return postModel;
 
     }
 
+    @Transactional
     public PostModel postEdit(long id) {
 
         Optional<Post> post = postRepository.findById(id);
@@ -59,7 +61,8 @@ public class BlogService {
 
     }
 
-    public void postUpdate(PostModel postModel, long id){
+    @Transactional
+    public void postUpdate(PostModel postModel, long id) {
 
         Post post = postRepository.findById(id).orElseThrow();
         post.setTitle(postModel.getTitle());
@@ -68,13 +71,14 @@ public class BlogService {
         postRepository.save(post);
     }
 
-    public void postDelete(Long id){
+    @Transactional
+    public void postDelete(Long id) {
         Post post = postRepository.findById(id).orElseThrow();
 
         postRepository.delete(post);
     }
 
-    public void iterateViews(Optional<Post> post){
+    public void iterateViews(Optional<Post> post) {
         post.get().setViews(post.get().getViews() + 1);
 
     }

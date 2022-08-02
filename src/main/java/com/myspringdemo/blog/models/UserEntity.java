@@ -1,7 +1,9 @@
 package com.myspringdemo.blog.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -14,6 +16,7 @@ import java.util.Set;
 @ToString
 @RequiredArgsConstructor
 @Entity
+@RequestMapping("users")
 @Table(name = "users")
 public class UserEntity {
 
@@ -22,6 +25,7 @@ public class UserEntity {
     private Long id;
     private String username;
     //@NotNull
+    @JsonIgnore
     @Size(min = 3, message = "Password is too short")
     private String password;
 

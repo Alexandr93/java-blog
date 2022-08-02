@@ -30,24 +30,21 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
 
-
-
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userRepository.findByUsername(username);
-        if(user==null){
+        if (user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found"));
         }
         return new User(user.getUsername(), user.getPassword(),
                 mapRolesToAuthorities(user.getRoles()));
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
 
-        return roles.stream().map(r-> new SimpleGrantedAuthority(r.getName().name())).collect(Collectors.toList());
+        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName().name())).collect(Collectors.toList());
     }
-
 
 
 }

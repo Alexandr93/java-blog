@@ -8,15 +8,14 @@ import com.myspringdemo.blog.models.Post;
 import com.myspringdemo.blog.models.UserEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
 /**
- *
  * @author admin
  */
-public interface PostRepository  extends JpaRepository<Post, Long> {
-    Iterable<Post> findPostByAuthor_Id(int author);
+public interface PostRepository extends JpaRepository<Post, Long> {
+    Iterable<Post> findPostByAuthor_Id(Long author);
+
     List<Post> findPostByAuthor(UserEntity user, Pageable pageable);
 }

@@ -44,17 +44,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <input  type="checkbox" th:field="*{roles}" th:value="${option.getId()}" th:text="${option.getName()}" >
 
             </li>
+            <li><label><input type="checkbox" th:field="*{enabled}"
+                              th:value="${user.isEnabled()}" th:text="Enable"  /></label></li>
         </ul>
-        <label><input type="checkbox" th:field="*{enabled}"
-                      th:value="${user.isEnabled()}" th:text="Enable"  /></label>
-<br>
+
+
         <input
 
                 type="hidden"
                 th:name="${_csrf.parameterName}"
                 th:value="${_csrf.token}" />
-        <br>
-        <button type="submit" class="btn btn-success">Edit roles</button>
+
+        <button type="submit" class="btn btn-success">Save</button>
     </form>
     </div>
 

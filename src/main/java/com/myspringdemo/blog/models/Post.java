@@ -7,6 +7,7 @@ package com.myspringdemo.blog.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 import javax.persistence.*;
 
@@ -22,17 +23,18 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title, anons, full_text;
+    @Version
     private int views;
 
 
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "user_id")
+    @JoinColumn(name = "author_id")
     private UserEntity author;
     public Post() {
-       author = new UserEntity();
-       author.setId(2L);//заглушка чтобы посты с рест приходили с автором api
+     /*  author = new UserEntity();
+       author.setId(2L);*///заглушка чтобы посты с рест приходили с автором api
     }
 
     public Post(String title, String anons, String full_text) {

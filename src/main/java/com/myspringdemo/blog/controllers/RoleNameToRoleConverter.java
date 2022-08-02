@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class RoleNameToRoleConverter implements Converter<Integer, Role>
+public class RoleNameToRoleConverter implements Converter<Long, Role>
 {
 
     RolesRepository rolesRepository;
@@ -23,20 +23,20 @@ public class RoleNameToRoleConverter implements Converter<Integer, Role>
         });
     }
 
-    private  Map<Integer, Role> rolesMap = new HashMap<>();
+    private  Map<Long, Role> rolesMap = new HashMap<>();
     @Autowired
     public RoleNameToRoleConverter( RolesRepository rolesRepository) {
         this.rolesRepository =rolesRepository;
         setRolesMap();
     }
 
-    public Map<Integer, Role> getRolesMap() {
+    public Map<Long, Role> getRolesMap() {
         return rolesMap;
     }
 
 
     @Override
-    public Role convert(Integer source) {
+    public Role convert(Long source) {
           return rolesRepository.findById(source).orElse(null);
       //  return rolesMap.get(source);
         

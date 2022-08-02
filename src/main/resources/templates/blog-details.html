@@ -19,15 +19,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
     <div class="container mt-5">
         
         <div th:each="el : ${post}" class="alert alert-info mt-2">
+            <form th:action="'/blog/' + ${el.id} + '/remove'" th:method="delete">
             <h1 th:text="${el.title}"/>
             <p th:text="${el.full_text}"/>
-            <p> <b>Views</b> <span th:text="${el.views}"/><p/>
-            <p> <b>Author</b> <span th:text="${el.author.getUsername()}"/><p/>
-            <a th:href="'/authors/' + ${el.author.getUsername()}" class="btn btn-warning" th:text="'All by author '+  ${el.author.getUsername()}"></a>
-            <a th:href="'/blog/' + ${el.id} +'/edit'" class="btn btn-warning">Edit</a>
+            <p> <b>Views</b> <span th:text="${el.views}"/></p>
+            <p> <b>Author</b> <span th:text="${el.author.getUsername()}"/></p>
+            <a th:href="'/authors/' + ${el.author.getUsername()}" class="btn btn-sm btn-outline-secondary" th:text="'All by author '+  ${el.author.getUsername()}"></a>
+            <a th:href="'/blog/' + ${el.id} +'/edit'" class="btn btn-sm btn-outline-secondary">Edit</a>
 
-            <form th:action="'/blog/' + ${el.id} + '/remove'" th:method="delete">
-                <button class="btn btn-warning" type="submit">Delete</button>
+
+                <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
             </form>
             
         </div>

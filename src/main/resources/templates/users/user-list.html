@@ -25,17 +25,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <h3 th:text="${el.username}"/>
 
 
-        <a th:href="'/users/' + ${el.username} +'/edit'" class="btn btn-warning">View more</a>
+
         <div class="container mt-1">
             <form th:action="'/users/' + ${el.username} + '/deleteuser'" method="post" >
-                <button class="btn btn-warning" type="submit">Delete</button>
+                <a th:href="'/users/' + ${el.username} +'/edit'" class="btn btn-sm btn-outline-secondary">Edit user</a>
+                <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
             </form>
         </div>
 
 
     </div>
     <form th:action="'/users/add'" method="get"  >
-        <button class="btn btn-warning" type="submit">Add user</button>
+        <button class="btn btn-success" type="submit">Add user</button>
     </form>
 
 </div>
