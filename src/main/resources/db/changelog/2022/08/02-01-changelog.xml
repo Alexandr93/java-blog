@@ -31,6 +31,7 @@
         </insert>
 
 
+
     </changeSet>
     <changeSet id="test_addautorities" author="alex">
         <insert tableName="users_has_roles">
@@ -48,6 +49,12 @@
             <column name="full_text" value="First post fulltext"/>
             <column name="views" valueNumeric="0"/>
             <column name="author_id" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="add_roles_03_08" author="alex">
+        <insert tableName="roles">
+            <column name="name" value="EDITOR"/>
         </insert>
     </changeSet>
 

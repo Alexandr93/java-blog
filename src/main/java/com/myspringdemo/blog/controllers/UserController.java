@@ -3,6 +3,7 @@ package com.myspringdemo.blog.controllers;
 import com.myspringdemo.blog.models.ERole;
 import com.myspringdemo.blog.models.Role;
 import com.myspringdemo.blog.models.UserEntity;
+import com.myspringdemo.blog.pojo.Message;
 import com.myspringdemo.blog.pojo.UserModel;
 import com.myspringdemo.blog.repo.RolesRepository;
 import com.myspringdemo.blog.repo.UserRepository;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
@@ -57,8 +60,9 @@ public class UserController {
 
 
     @PostMapping("/users/{username}/edit")
-    public String userEdit(@ModelAttribute UserEntity user, @PathVariable String username){
+    public String userEdit(@ModelAttribute UserEntity user, @PathVariable String username, HttpSession session){
        userService.updateUser(user);
+        session.setAttribute("message", new Message("User successfully updated", true, "success"));
        return "redirect:/users/"+user.getUsername()+"/edit";
     }
 
@@ -72,20 +76,22 @@ public class UserController {
 
 
     @PostMapping("/users/add")
-    public String userCreate(@ModelAttribute("user")@Valid UserEntity user, BindingResult bindingResult){
+    public String userCreate(@ModelAttribute("user")@Valid UserEntity user, BindingResult bindingResult, HttpSession session){
                            //получаем юзера с формы, за счет конвертера получаем сразу роли, а не айдишники ролей
+
         if (bindingResult.hasErrors()){
 
             return "users/user-add";
         }
 
         userService.createUser(user);
-
+        session.setAttribute("message", new Message("User successfully added", true, "success"));
         return "redirect:/users";
     }
     @PostMapping("/users/{username}/deleteuser")
-    public String userDelete(@PathVariable String username){
+    public String userDelete(@PathVariable String username, HttpSession session){
         userService.deleteUser(username);
+        session.setAttribute("message", new Message("User successfully deleted", true, "danger"));
         return "redirect:/users";
     }
 

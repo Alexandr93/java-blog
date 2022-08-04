@@ -1,16 +1,18 @@
 package com.myspringdemo.blog.services;
 
+import com.myspringdemo.blog.exception.PostNotFoundException;
+import com.myspringdemo.blog.exception.SaveOrUpdateException;
 import com.myspringdemo.blog.models.Post;
 import com.myspringdemo.blog.models.UserEntity;
 import com.myspringdemo.blog.pojo.PostModel;
 import com.myspringdemo.blog.repo.PostRepository;
 import com.myspringdemo.blog.repo.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -21,12 +23,12 @@ public class BlogService {
     private final PostRepository postRepository;
 
     @Transactional
-    public void addPost(PostModel postModel, String author) {
+    public PostModel addPost(PostModel postModel, String author) {
 
-        UserEntity user = userRepository.findByUsername(author);
+        UserEntity user = userRepository.findByUsername(author).orElseThrow(() -> new UsernameNotFoundException("Author not found"));
         Post post = PostModel.PostModelToPost(postModel);
         post.setAuthor(user);
-        postRepository.save(post);
+        return PostModel.PostToPostModel(postRepository.save(post));
 
 
     }
@@ -40,46 +42,48 @@ public class BlogService {
 
     //добавить проверку и ексепшны
     @Transactional
-    public PostModel postDetails(long id) {
+    public PostModel postDetails(long id) throws SaveOrUpdateException, PostNotFoundException {
 
-        Optional<Post> post = postRepository.findById(id);
+        Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException("Post not found"));
         PostModel postModel;
         // post.get().setViews(post.get().getViews() + 1);
         iterateViews(post);
-        postModel = PostModel.PostToPostModel(postRepository.save(post.get()));
-        return postModel;
+        try {
+            postModel = PostModel.PostToPostModel(postRepository.save(post));
+            return postModel;
+        } catch (Exception e) {
+            throw new SaveOrUpdateException("");
+            //throw new PostNotFoundException("Post not found");
+        }
+    }
+
+    @Transactional
+    public PostModel postEdit(long id) throws PostNotFoundException {
+
+        Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException("Post not found"));
+
+        return PostModel.PostToPostModel(postRepository.save(post));
 
     }
 
     @Transactional
-    public PostModel postEdit(long id) {
-
-        Optional<Post> post = postRepository.findById(id);
-        PostModel postModel;
-        postModel = PostModel.PostToPostModel(postRepository.save(post.get()));
-        return postModel;
-
-    }
-
-    @Transactional
-    public void postUpdate(PostModel postModel, long id) {
+    public PostModel postUpdate(PostModel postModel, long id) {
 
         Post post = postRepository.findById(id).orElseThrow();
         post.setTitle(postModel.getTitle());
         post.setAnons(postModel.getAnons());
         post.setFull_text(postModel.getFull_text());
-        postRepository.save(post);
+        return PostModel.PostToPostModel(postRepository.save(post));
     }
 
     @Transactional
-    public void postDelete(Long id) {
-        Post post = postRepository.findById(id).orElseThrow();
-
+    public void postDelete(Long id) throws PostNotFoundException {
+        Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException("Post not found"));//mb we need to check postexists
         postRepository.delete(post);
     }
 
-    public void iterateViews(Optional<Post> post) {
-        post.get().setViews(post.get().getViews() + 1);
+    public void iterateViews(Post post) {
+        post.setViews(post.getViews() + 1);
 
     }
 }

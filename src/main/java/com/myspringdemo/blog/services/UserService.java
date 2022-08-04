@@ -7,6 +7,8 @@ import com.myspringdemo.blog.pojo.UserModel;
 import com.myspringdemo.blog.repo.RolesRepository;
 import com.myspringdemo.blog.repo.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,21 +47,27 @@ public class UserService {
         userRepository.save(user);
         return user;
     }
+
     @Transactional
     public void updateUser(UserEntity user) {
-        UserEntity userUpdate = userRepository.findByUsername(user.getUsername());
+
+        UserEntity userUpdate = userRepository.findByUsername(user.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         userUpdate.setEnabled(user.isEnabled());
         userUpdate.setRoles(user.getRoles());
 
         userRepository.save(userUpdate);
+
+
     }
 
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteUser(String username) {
-        UserEntity user = userRepository.findByUsername(username);
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         userRepository.delete(user);
     }
+
     @Transactional
     public Iterable<Role> getRolesList() {
         return rolesRepository.findAll();
@@ -72,11 +80,13 @@ public class UserService {
         users.forEach(user -> usersList.add(UserModel.userEntityToUserModel(user)));
         return usersList;
     }
+
     @Transactional
     public UserModel findByUsername(String username) {
 
+        return UserModel.userEntityToUserModel(userRepository.findByUsername(username).orElseThrow());
 
-        return UserModel.userEntityToUserModel(userRepository.findByUsername(username));
+
     }
 
 }

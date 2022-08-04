@@ -5,6 +5,9 @@
 package com.myspringdemo.blog.controllers;
 
 
+import com.myspringdemo.blog.exception.PostNotFoundException;
+import com.myspringdemo.blog.exception.SaveOrUpdateException;
+import com.myspringdemo.blog.pojo.Message;
 import com.myspringdemo.blog.pojo.PostModel;
 import com.myspringdemo.blog.services.BlogService;
 import org.springframework.stereotype.Controller;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.List;
 
@@ -50,24 +54,16 @@ public class BlogController {
 
     @PostMapping("/blog/add")
 
-    public String blogPostAdd(@ModelAttribute PostModel post, Principal principal) {
+    public String blogPostAdd(@ModelAttribute PostModel post, Principal principal, HttpSession session) {
 
         blogService.addPost(post, principal.getName());
+        session.setAttribute("message", new Message("Post successfully published", true, "success"));
         return "redirect:/blog";
     }
 
     @GetMapping("/blog/{id}")
-    public String blogDetails(@PathVariable(value = "id") long id, Model model) {
-     /*   if(!postRepository.existsById(id))
-            return "redirect:/blog";
-        Optional<Post> post = postRepository.findById(id);
-        ArrayList<Post> res = new ArrayList<>();
-        post.ifPresent(post1 -> {
-            post1.setViews(post1.getViews()+1);
-            res.add(post1);
-            postRepository.save(post1);//сделать позже обновление только просмотров
-        });
-        */
+    public String blogDetails(@PathVariable(value = "id") long id, Model model) throws PostNotFoundException, SaveOrUpdateException {
+
 
         PostModel postModel = blogService.postDetails(id);
         model.addAttribute("post", postModel);
@@ -75,32 +71,29 @@ public class BlogController {
     }
 
     @GetMapping("/blog/{id}/edit")
-    public String blogEdit(@PathVariable(value = "id") Long id, Model model) {
-       /* if(!postRepository.existsById(id))
-            return "redirect:/blog";
+    public String blogEdit(@PathVariable(value = "id") Long id, Model model) throws PostNotFoundException {
 
-        Optional<Post> post = postRepository.findById(id);
-        ArrayList<Post> res = new ArrayList<>();
-        post.ifPresent(res::add);*/
+            PostModel post = blogService.postEdit(id);
+            model.addAttribute("post", post);
 
-        PostModel post = blogService.postEdit(id);
-        model.addAttribute("post", post);
+            return "blog-edit";
 
-        return "blog-edit";
     }
 
     @PostMapping("/blog/{id}/edit")
     public String postUpdate(@ModelAttribute PostModel postModel,
-                             @PathVariable(value = "id") Long id) {
+                             @PathVariable(value = "id") Long id, HttpSession session, Model model) {
 
         blogService.postUpdate(postModel, id);
 
-        return "redirect:/blog";
+        session.setAttribute("message", new Message("Successfully updated", true, "success"));
+        return "redirect:/blog/"+id+"/edit";
     }
 
     @PostMapping("/blog/{id}/remove")
-    public String blogPostDelete(@PathVariable(value = "id") Long id) {
+    public String blogPostDelete(@PathVariable(value = "id") Long id, HttpSession session) throws PostNotFoundException {
         blogService.postDelete(id);
+        session.setAttribute("message", new Message("Post deleted", true, "danger"));
         return "redirect:/blog";
     }
 

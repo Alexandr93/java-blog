@@ -39,7 +39,7 @@ public class AuthorService {
     public List<PostModel> postByAuthor(String username) {
         userRepository.findByUsername(username);
         Pageable pageable = PageRequest.of(0, pageSizeProp.getPageSize());
-        List<Post> postModelList = postRepository.findPostByAuthor(userRepository.findByUsername(username), pageable);
+        List<Post> postModelList = postRepository.findPostByAuthor(userRepository.findByUsername(username).get(), pageable);
 
         return postModelList.stream().map(PostModel::PostToPostModel).collect(Collectors.toList());
     }

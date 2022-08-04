@@ -29,7 +29,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
 
     <div class="album py-5 bg-light">
-
+        <div th:if="${session.message!=null && session.message.isHasMessage()}" class="container">
+            <div th:classappend="${'alert-'+session.message.getType()}" class="alert " role="alert" th:text="${session.message.getMessage()}">
+                Successfully updated!
+            </div>
+            <th:block th:text="${#session.removeAttribute('message')}"></th:block>
+        </div>
         <div class="container">
             <h1>Site Blog</h1>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">

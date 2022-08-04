@@ -29,6 +29,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
 
     </div>-->
+    <div th:if="${session.message!=null && session.message.isHasMessage()}" class="container">
+        <div th:classappend="${'alert-'+session.message.getType()}" class="alert " role="alert" th:text="${session.message.getMessage()}">
+            Successfully updated!
+        </div>
+        <th:block th:text="${#session.removeAttribute('message')}"></th:block>
+    </div>
+
 
     <div class="container mt-5">
 

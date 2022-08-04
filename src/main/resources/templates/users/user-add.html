@@ -26,7 +26,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <input type="text" th:field="*{username}"
                id="username" placeholder="Please add username" class="form-control"><br>
         <input type="text" th:field="*{password}" id="password" placeholder="Please add password" class="form-control"><br>
-        <div
+        <div class="alert alert-danger"
         th:if="${#fields.hasErrors('password')}"
         th:errors="*{password}">password error</div>
 

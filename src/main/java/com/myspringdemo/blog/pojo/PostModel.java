@@ -1,6 +1,7 @@
 package com.myspringdemo.blog.pojo;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.myspringdemo.blog.models.ERole;
 import com.myspringdemo.blog.models.Post;
 import com.myspringdemo.blog.models.UserEntity;
@@ -13,6 +14,8 @@ public class PostModel {
     private Long id;
     private String title, anons, full_text;
     private int views;
+
+    @JsonIgnore
     private UserEntity author;
 
 
