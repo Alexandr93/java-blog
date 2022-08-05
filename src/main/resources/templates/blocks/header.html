@@ -9,10 +9,11 @@
            <!-- <a class="me-3 py-2 text-dark text-decoration-none" href="/">Home</a>-->
             <a class="me-3 py-2 text-dark text-decoration-none" href="/blog">Blog</a>
             <a class="me-3 py-2 text-dark text-decoration-none" href="/blog/add">Add post</a>
-            <a class="me-3 py-2 text-dark text-decoration-none" href="/about">About us</a>
+           <!-- <a class="me-3 py-2 text-dark text-decoration-none" href="/about">About us</a>-->
               <a class="me-3 py-2 text-dark text-decoration-none" href="/users">Users</a>
               <a class="me-3 py-2 text-dark text-decoration-none" href="/authors">Our authors</a>
-              <a href="/logout" th:inline="text" class="me-3 py-2 text-dark text-decoration-none"> [[${#httpServletRequest.remoteUser}]]</a>
+              <th:block th:if="${#httpServletRequest.remoteUser}"><a href="/logout" th:inline="text" class="me-3 py-2 text-dark text-decoration-none"> [[${#httpServletRequest.remoteUser}]]</a></th:block>
+             <th:block th:unless="${#httpServletRequest.remoteUser}"><a href="/login" th:inline="text" class="me-3 py-2 text-dark text-decoration-none">login</a></th:block>
           </nav>
      </div>
  </div>

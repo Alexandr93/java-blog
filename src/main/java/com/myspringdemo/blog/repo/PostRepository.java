@@ -6,6 +6,7 @@ package com.myspringdemo.blog.repo;
 
 import com.myspringdemo.blog.models.Post;
 import com.myspringdemo.blog.models.UserEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -16,6 +17,6 @@ import java.util.List;
  */
 public interface PostRepository extends JpaRepository<Post, Long> {
     Iterable<Post> findPostByAuthor_Id(Long author);
-
+    Page<Post> findAll(Pageable pageable);
     List<Post> findPostByAuthor(UserEntity user, Pageable pageable);
 }

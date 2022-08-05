@@ -5,19 +5,22 @@
 package com.myspringdemo.blog.controllers;
 
 
+import com.myspringdemo.blog.configs.PageSizeProp;
 import com.myspringdemo.blog.exception.PostNotFoundException;
 import com.myspringdemo.blog.exception.SaveOrUpdateException;
 import com.myspringdemo.blog.pojo.Message;
 import com.myspringdemo.blog.pojo.PostModel;
+import com.myspringdemo.blog.pojo.PostModelPage;
 import com.myspringdemo.blog.services.BlogService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.websocket.server.PathParam;
 import java.security.Principal;
 import java.util.List;
 
@@ -40,8 +43,13 @@ public class BlogController {
     }
 
     @GetMapping("/blog")
-    public String blogMain(Model model) {
-        List<PostModel> posts = blogService.getAllPosts();
+    public String blogMain(Model model, @RequestParam(value ="page", defaultValue = "1") int page, @RequestParam(value ="size", defaultValue = "3") int size) {
+      //  List<PostModel> posts = blogService.getAllPosts();
+
+        List<PostModelPage> posts = blogService.getPostsPageable(page, size);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("itemsCount", posts.get(0).getItemsCount());
+        model.addAttribute("pagesCount", posts.get(0).getPageCount());
         model.addAttribute("posts", posts);
 
         return "blog-main";

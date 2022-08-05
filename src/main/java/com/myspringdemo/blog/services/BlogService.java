@@ -1,13 +1,18 @@
 package com.myspringdemo.blog.services;
 
+import com.myspringdemo.blog.configs.PageSizeProp;
 import com.myspringdemo.blog.exception.PostNotFoundException;
 import com.myspringdemo.blog.exception.SaveOrUpdateException;
 import com.myspringdemo.blog.models.Post;
 import com.myspringdemo.blog.models.UserEntity;
 import com.myspringdemo.blog.pojo.PostModel;
+import com.myspringdemo.blog.pojo.PostModelPage;
 import com.myspringdemo.blog.repo.PostRepository;
 import com.myspringdemo.blog.repo.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +27,7 @@ public class BlogService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
+    private PageSizeProp pageSizeProp;
     @Transactional
     public PostModel addPost(PostModel postModel, String author) {
 
@@ -32,12 +38,28 @@ public class BlogService {
 
 
     }
-
+    @Transactional
     public List<PostModel> getAllPosts() {
         List<Post> posts = postRepository.findAll();
         return posts.stream()
                 .map(PostModel::PostToPostModel).toList();
     }
+    
+    @Transactional
+    public List<PostModelPage> getPostsPageable(int page, int size) {
+        Pageable pageable = PageRequest.of(page-1, size);
+        Page<Post> posts = postRepository.findAll(pageable);
+             return  posts.stream()
+                .map(post -> {
+                    PostModelPage postModelPage =  PostModelPage.PostToPostModelPage(post);
+                    postModelPage.setPageCount(posts.getTotalPages());
+                    postModelPage.setItemsCount(posts.getTotalElements());
+
+                    return postModelPage;
+
+                }).toList();
+    }
+
 
 
     //добавить проверку и ексепшны

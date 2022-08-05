@@ -9,4 +9,5 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "author.orders")
 public class PageSizeProp {
     private int pageSize = 4;
+
 }
