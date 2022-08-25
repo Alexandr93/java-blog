@@ -8,4 +8,5 @@
       </database-info>
     </database-infos>
   </component>
+  <component name="JpaPluginProjectSettings" dtoSerializableType="2" />
 </project>

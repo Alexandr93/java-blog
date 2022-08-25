@@ -1,9 +1,12 @@
-package com.myspringdemo.blog.controllers;
+package com.myspringdemo.blog.services;
 
 import com.myspringdemo.blog.models.Role;
 
 import com.myspringdemo.blog.repo.RolesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +17,14 @@ import java.util.Map;
 public class RoleNameToRoleConverter implements Converter<Long, Role>
 {
 
-    RolesRepository rolesRepository;
+    private final RolesRepository rolesRepository;
 
+
+    @Autowired
+    public RoleNameToRoleConverter(RolesRepository rolesRepository) {
+        this.rolesRepository =rolesRepository;
+        setRolesMap();
+    }
     public void setRolesMap() {
         rolesRepository.findAll().forEach(role -> {
 
@@ -24,11 +33,7 @@ public class RoleNameToRoleConverter implements Converter<Long, Role>
     }
 
     private  Map<Long, Role> rolesMap = new HashMap<>();
-    @Autowired
-    public RoleNameToRoleConverter( RolesRepository rolesRepository) {
-        this.rolesRepository =rolesRepository;
-        setRolesMap();
-    }
+
 
     public Map<Long, Role> getRolesMap() {
         return rolesMap;
@@ -37,8 +42,8 @@ public class RoleNameToRoleConverter implements Converter<Long, Role>
 
     @Override
     public Role convert(Long source) {
-          return rolesRepository.findById(source).orElse(null);
-      //  return rolesMap.get(source);
+         //return rolesRepository.findById(source).orElse(null);
+        return rolesMap.get(source);
         
     }
 }

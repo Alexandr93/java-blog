@@ -1,8 +1,7 @@
 package com.myspringdemo.blog.rest;
 
 
-import com.myspringdemo.blog.exception.PostNotFoundException;
-import com.myspringdemo.blog.pojo.PostModel;
+import com.myspringdemo.blog.dto.blog.PostModel;
 import com.myspringdemo.blog.services.BlogService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,7 +31,7 @@ public class PostController {
 
 
     @PatchMapping("/{id}/edit")
-    public ResponseEntity<PostModel> editPost(@RequestBody PostModel postModel, @PathVariable("id") Long id) throws PostNotFoundException {
+    public ResponseEntity<PostModel> editPost(@RequestBody PostModel postModel, @PathVariable("id") Long id) {
 
 
         // PostModel post = blogService.postEdit(id);
@@ -41,8 +40,10 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<Response> deletePost(@PathVariable Long id) throws PostNotFoundException {
+    public ResponseEntity<Response> deletePost(@PathVariable Long id) {
         blogService.postDelete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
     }
+
 }

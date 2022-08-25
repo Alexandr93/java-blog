@@ -1,4 +1,4 @@
-package com.myspringdemo.blog.pojo;
+package com.myspringdemo.blog.dto.blog;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,5 +9,7 @@ public class Message {
     private String message;
     private boolean hasMessage;
     private String type;
+
+
 
 }

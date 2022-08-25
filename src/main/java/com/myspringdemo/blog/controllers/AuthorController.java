@@ -1,8 +1,12 @@
 package com.myspringdemo.blog.controllers;
 
-import com.myspringdemo.blog.pojo.Author;
-import com.myspringdemo.blog.pojo.PostModel;
+
+import com.myspringdemo.blog.dto.blog.PostModel;
+import com.myspringdemo.blog.dto.user.AuthorListDto;
 import com.myspringdemo.blog.services.AuthorService;
+
+
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +30,7 @@ public class AuthorController {
 
     @ModelAttribute
     public void getAllUsersList(Model model) {
-        Set<Author> authorsList = authorService.getAllAuthors();
+        Set<AuthorListDto> authorsList = authorService.getAllAuthors();
         model.addAttribute("authorsList", authorsList);
 
     }

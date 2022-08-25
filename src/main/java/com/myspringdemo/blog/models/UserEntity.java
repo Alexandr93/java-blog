@@ -27,6 +27,7 @@ public class UserEntity {
     //@NotNull
     @JsonIgnore
     @Size(min = 3, message = "Password is too short")
+    @ToString.Exclude
     private String password;
 
 

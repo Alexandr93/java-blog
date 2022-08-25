@@ -18,14 +18,15 @@ public class MainController {
 
 	@GetMapping("/")
 	public String home(Model model) {
-		model.addAttribute("title", "Main page");
-		return "home";
+		//model.addAttribute("title", "Main page");
+		return "redirect:/blog";
+
 	}
         
         @GetMapping("/about")
 	public String about(Model model) {
 		model.addAttribute("title", "About us");
-		return "about";
+		return "redirect:/blog";
 	}
 
 }
