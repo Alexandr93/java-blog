@@ -1,13 +1,17 @@
 package com.myspringdemo.blog.services;
 
-import com.myspringdemo.blog.dto.user.*;
+
+import com.myspringdemo.blog.dto.user.RolesNamesDto;
+import com.myspringdemo.blog.dto.user.UserCreateDto;
+import com.myspringdemo.blog.dto.user.UserListDto;
+import com.myspringdemo.blog.dto.user.UserModel;
 import com.myspringdemo.blog.models.Role;
 import com.myspringdemo.blog.models.UserEntity;
 import com.myspringdemo.blog.repo.RolesRepository;
 import com.myspringdemo.blog.repo.UserRepository;
+
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,8 +35,6 @@ public class UserService {
     private final RoleNameToRoleConverter roleNameToRoleConverter;
 
 
-
-
     @Transactional
     public List<RolesNamesDto> getUserRoles() {
         List<RolesNamesDto> rolesDtoList = roleNameToRoleConverter.
@@ -41,18 +43,9 @@ public class UserService {
 
         return rolesDtoList;
 
-      /*  return username.stream()
-                .map(r -> rolesRepository.findByName(r))
-                .collect(Collectors.toSet());*/
     }
 
-    @Transactional
-    public Set<Role> getUserRolesbyId(List<Long> id) {
-        return id.stream()
-                .map(r -> rolesRepository.findById(r).get())
-                .collect(Collectors.toSet());
 
-    }
 
     @Transactional
     public UserCreateDto createUser(UserCreateDto userCreateDto) {
@@ -98,11 +91,6 @@ public class UserService {
 
 
     //@Transactional
-    public Set<Role> findRoleById(Set<Long> roleId) {
-        return roleId.stream().map(s -> rolesRepository.findById(s).get()).collect(Collectors.toSet());
-
-
-    }
 
     @Transactional
     public UserModel findByUsername(String username) {

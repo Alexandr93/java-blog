@@ -40,7 +40,9 @@ public class Tut1Config {
     }
     @Bean
     public MessageConverter messageConverter(){
-        return new Jackson2JsonMessageConverter();
+        Jackson2JsonMessageConverter messageConverter = new Jackson2JsonMessageConverter();
+
+        return messageConverter;
     }
 
     @Bean
