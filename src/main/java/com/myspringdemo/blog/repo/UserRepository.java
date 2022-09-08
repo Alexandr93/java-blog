@@ -1,7 +1,6 @@
 package com.myspringdemo.blog.repo;
 
 import com.myspringdemo.blog.models.UserEntity;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

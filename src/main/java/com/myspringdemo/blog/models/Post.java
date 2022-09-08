@@ -7,7 +7,6 @@ package com.myspringdemo.blog.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.springframework.web.bind.annotation.PatchMapping;
 
 import javax.persistence.*;
 

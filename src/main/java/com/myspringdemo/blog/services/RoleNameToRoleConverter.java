@@ -4,9 +4,6 @@ import com.myspringdemo.blog.models.Role;
 
 import com.myspringdemo.blog.repo.RolesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 
