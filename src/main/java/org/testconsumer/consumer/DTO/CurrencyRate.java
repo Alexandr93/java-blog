@@ -10,12 +10,7 @@ import lombok.Data;
 @JsonNaming(PropertyNamingStrategy.LowerCaseStrategy.class)
 //@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public class CurrencyRate {
-   /* private String startdate;
-    private String timesign;
-    private String currencycode;
-    private String currencycodel;
-    private int units;
-    private double amount;*/
+
 
     private String r030;
     private String txt;
